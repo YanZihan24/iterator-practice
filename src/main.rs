@@ -1,8 +1,6 @@
 #![allow(dead_code, unused_variables)]
 
-fn main() {
-    println!("Run `cargo test` to check your solutions!");
-}
+use std::fmt::Debug;
 
 // =============================================================================
 // Easy
@@ -145,117 +143,94 @@ fn count_words_longer_than_average(words: &[&str]) -> usize {
 /// Input:   &[4, 1, 7, 3, 9, 2, 8]
 /// Output:  8
 ///
+/// Hints: Start with (i32::MIN, i32::MIN) and update both values as you walk through the iterator.
 /// Statements needed: 1
 fn second_largest(numbers: &[i32]) -> i32 {
     todo!()
 }
 
+// ============================================================================= 
+// Main and Test Harness
 // =============================================================================
-// Tests
-// =============================================================================
+fn main() {
+    let mut results: Vec<Option<bool>> = Vec::new();
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    println!("── Easy ──────────────────────────────────────────────────");
+    results.push(check("sum_of_list", "[1, 2, 3, 4, 5]",
+        || sum_of_list(&[1, 2, 3, 4, 5]), 15));
+    results.push(check("filter_even", "[1, 2, 3, 4, 5, 6, 7, 8]",
+        || filter_even(&[1, 2, 3, 4, 5, 6, 7, 8]), vec![2, 4, 6, 8]));
+    results.push(check(r#"uppercase_all(["hello", "world", "rust"])"#, r#"["hello", "world", "rust"]"#,
+        || uppercase_all(&["hello", "world", "rust"]),
+        vec!["HELLO".to_string(), "WORLD".to_string(), "RUST".to_string()]));
+    results.push(check("count_negatives", "[3, -1, 4, -1, -5, 9, 2, -6]",
+        || count_negatives(&[3, -1, 4, -1, -5, 9, 2, -6]), 4));
 
-    /// Runs `$call`, asserting the result equals `$expected`.
-    ///
-    /// If the function panics with `todo!()` ("not yet implemented"), the test is quietly
-    /// skipped so you can run the full suite while only a few problems are done.
-    ///
-    /// Any *other* panic (e.g. an index-out-of-bounds bug) will still fail the test normally.
-    macro_rules! test_problem {
-        ($call:expr, $expected:expr) => {{
-            let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| $call));
-            match result {
-                Err(e) => {
-                    let is_todo = e
-                        .downcast_ref::<&str>()
-                        .map(|s| s.contains("not yet implemented"))
-                        .unwrap_or(false);
-                    if is_todo {
-                        eprintln!("[skipped — not yet implemented]");
-                    } else {
-                        std::panic::resume_unwind(e);
-                    }
-                }
-                Ok(actual) => assert_eq!(actual, $expected),
-            }
-        }};
-    }
+    println!("\n── Medium ────────────────────────────────────────────────");
+    results.push(check("double_and_filter", "[1, 2, 3, 4, 5]",
+        || double_and_filter(&[1, 2, 3, 4, 5]), vec![6, 8, 10]));
+    results.push(check("longest_word", r#"["apple", "fig", "banana", "kiwi"]"#,
+        || longest_word(&["apple", "fig", "banana", "kiwi"]),
+        Some("banana".to_string())));
+    results.push(check("first_word_starting_with", r#"["peach", "apricot", "plum", "avocado", "pear"], 'a'"#,
+        || first_word_starting_with(&["peach", "apricot", "plum", "avocado", "pear"], 'a'),
+        Some("apricot".to_string())));
+    results.push(check("zip_and_sum", "a = [1, 2, 3, 4], b = [10, 20, 30, 40]",
+        || zip_and_sum(&[1, 2, 3, 4], &[10, 20, 30, 40]), vec![11, 22, 33, 44]));
 
-    // --- Easy ---
+    println!("\n── Hard ──────────────────────────────────────────────────");
+    results.push(check("count_words_longer_than_average",
+        r#"["cat", "elephant", "ox", "butterfly", "ant", "rhinoceros"]"#,
+        || count_words_longer_than_average(&["cat", "elephant", "ox", "butterfly", "ant", "rhinoceros"]),
+        3));
+    results.push(check("second_largest", "[4, 1, 7, 3, 9, 2, 8]",
+        || second_largest(&[4, 1, 7, 3, 9, 2, 8]), 8));
 
-    #[test]
-    fn test_sum_of_list() {
-        test_problem!(sum_of_list(&[1, 2, 3, 4, 5]), 15);
-    }
+    let implemented = results.iter().filter(|r| r.is_some()).count();
+    let correct = results.iter().filter(|r| **r == Some(true)).count();
 
-    #[test]
-    fn test_filter_even() {
-        test_problem!(filter_even(&[1, 2, 3, 4, 5, 6, 7, 8]), vec![2, 4, 6, 8]);
-    }
-
-    #[test]
-    fn test_uppercase_all() {
-        test_problem!(
-            uppercase_all(&["hello", "world", "rust"]),
-            vec!["HELLO".to_string(), "WORLD".to_string(), "RUST".to_string()]
-        );
-    }
-
-    #[test]
-    fn test_count_negatives() {
-        test_problem!(count_negatives(&[3, -1, 4, -1, -5, 9, 2, -6]), 4);
-    }
-
-    // --- Medium ---
-
-    #[test]
-    fn test_double_and_filter() {
-        test_problem!(double_and_filter(&[1, 2, 3, 4, 5]), vec![6, 8, 10]);
-    }
-
-    #[test]
-    fn test_longest_word() {
-        test_problem!(
-            longest_word(&["apple", "fig", "banana", "kiwi"]),
-            Some("banana".to_string())
-        );
-    }
-
-    #[test]
-    fn test_first_word_starting_with() {
-        test_problem!(
-            first_word_starting_with(&["peach", "apricot", "plum", "avocado", "pear"], 'a'),
-            Some("apricot".to_string())
-        );
-    }
-
-    #[test]
-    fn test_zip_and_sum() {
-        test_problem!(
-            zip_and_sum(&[1, 2, 3, 4], &[10, 20, 30, 40]),
-            vec![11, 22, 33, 44]
-        );
-    }
-
-    // --- Hard ---
-
-    #[test]
-    fn test_count_words_longer_than_average() {
-        // Average length = 35 / 6 ≈ 5.83
-        // Words above average: "elephant"(8), "butterfly"(9), "rhinoceros"(10) → 3
-        test_problem!(
-            count_words_longer_than_average(&[
-                "cat", "elephant", "ox", "butterfly", "ant", "rhinoceros"
-            ]),
-            3
-        );
-    }
-
-    #[test]
-    fn test_second_largest() {
-        test_problem!(second_largest(&[4, 1, 7, 3, 9, 2, 8]), 8);
+    println!("\n── Results ───────────────────────────────────────────────");
+    if implemented == 0 {
+        println!("No problems implemented yet. Replace a todo!() with your solution!");
+    } else {
+        println!("{implemented}/10 implemented  ·  {correct}/{implemented} correct");
     }
 }
+
+/// Runs `f` and compares its output to `expected`, printing the result.
+/// Returns Some(true) if correct, Some(false) if wrong, None if not yet implemented.
+fn check<T>(name: &str, input: &str, f: impl FnOnce() -> T, expected: T) -> Option<bool>
+where
+    T: Debug + PartialEq,
+{
+    let prev_hook = std::panic::take_hook();
+    std::panic::set_hook(Box::new(|_| {})); // silence the default "panicked at" message
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(f));
+    std::panic::set_hook(prev_hook);
+
+    match result {
+        Err(e) => {
+            let is_todo = e
+                .downcast_ref::<&str>()
+                .map(|s| s.contains("not yet implemented"))
+                .unwrap_or(false);
+            if !is_todo {
+                std::panic::resume_unwind(e);
+            }
+            None
+        }
+        Ok(actual) => {
+            let passed = actual == expected;
+            let mark = if passed { "✓" } else { "✗" };
+            println!("\n  {mark} {name}");
+            println!("    input:    {input}");
+            println!("    output:   {:?}", actual);
+            if !passed {
+                println!("    expected: {:?}", expected);
+            }
+            Some(passed)
+        }
+    }
+}
+
+// ───────────────────────────────────────────────────────────────
