@@ -16,7 +16,7 @@ use std::fmt::Debug;
 /// Hints: .iter(), .sum()
 /// Statements needed: 1
 fn sum_of_list(numbers: &[i32]) -> i32 {
-    todo!()
+    numbers.iter().sum()
 }
 
 /// Problem 2 (Easy): Filter Even Numbers
@@ -29,7 +29,7 @@ fn sum_of_list(numbers: &[i32]) -> i32 {
 ///
 /// Statements needed: 1
 fn filter_even(numbers: &[i32]) -> Vec<&i32> {
-    todo!()
+    numbers.iter().filter(|x| *x % 2 == 0).collect()
 }
 
 /// Problem 3 (Easy): Uppercase All Words
@@ -43,7 +43,7 @@ fn filter_even(numbers: &[i32]) -> Vec<&i32> {
 /// Hints: .iter(), .map(), .to_uppercase(), .collect()
 /// Statements needed: 1
 fn uppercase_all(words: &[&str]) -> Vec<String> {
-    todo!()
+    words.iter().map(|word| word.to_uppercase()).collect()
 }
 
 /// Problem 4 (Easy): Count Negative Numbers
@@ -73,7 +73,7 @@ fn count_negatives(numbers: &[i32]) -> usize {
 /// Hints: .iter(), .map(), .filter(), .collect()
 /// Statements needed: 1
 fn double_and_filter(numbers: &[i32]) -> Vec<i32> {
-    todo!()
+    numbers.iter().map(|n| n * 2).filter(|n| *n > 5).collect()
 }
 
 /// Problem 6 (Medium): Longest Word
@@ -109,11 +109,12 @@ fn first_word_starting_with(words: &[&str], letter: char) -> Option<String> {
 /// at the same index and collect their sums into a new vector.
 ///
 /// Input:   &[1, 2, 3, 4], &[10, 20, 30, 40]
+            [(1,10), (2,20), (3,30), (4,40)]
 /// Output:  vec![11, 22, 33, 44]
 ///
 /// Statements needed: 1
 fn zip_and_sum(a: &[i32], b: &[i32]) -> Vec<i32> {
-    todo!()
+    a.iter().zip(b.iter()).map(|x, y| x + y).collect()
 }
 
 // =============================================================================
